@@ -9,12 +9,14 @@ public class GOLRUNNER : MonoBehaviour
 
     public ComputeShader compute;
     public Texture input;
-    [SerializeField] int size;
+    public int size;
     public RenderTexture result;
+    public Material material;
+
     private RenderTexture buffer;
     private bool buffering = false;
     private int kernel;
-    public Material material;
+
     
     void Awake()
     {
@@ -24,6 +26,7 @@ public class GOLRUNNER : MonoBehaviour
             Application.targetFrameRate = FPS;
         }
     }
+
     void Start()
     {
         kernel = compute.FindKernel("CSMain");
@@ -54,6 +57,7 @@ public class GOLRUNNER : MonoBehaviour
 
         if (buffering)
         {
+           
             compute.SetTexture(kernel, "Input", result);
             compute.SetTexture(kernel, "Result", buffer);
 
@@ -63,6 +67,7 @@ public class GOLRUNNER : MonoBehaviour
             buffering = false;
         } else
         {
+   
             compute.SetTexture(kernel, "Input", buffer);
             compute.SetTexture(kernel, "Result", result);
 

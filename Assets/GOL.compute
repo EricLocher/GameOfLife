@@ -12,22 +12,15 @@ bool CheckSurroundings(uint3 pos){
 	for(int x = -1; x <= 1; x++){
 		for(int y = -1; y <= 1; y++){
 			if(x == 0 && y == 0) { continue; }
-			else if(Input[pos + int2(x, y)].x > 0){
+			else if(Input[pos.xy + int2(x, y)].x > 0.8){
 				check++;
 			}
 		}
 	}
 
-	if(check >= 2 && Input[pos.xy].x > 0){
-		if(check < 4)
-			return true;
-		else
-			return false;
-	} else if(check == 3 && Input[pos.xy].x == 0){
-		return true;
-	} else {
-		return false;
-	}
+	if(check == 3) { return true; }
+	if(check == 2 && Input[pos.xy].x > 0.8) { return true;}
+	else { return false; }
 
 }
 
@@ -36,12 +29,9 @@ void CSMain (uint3 id : SV_DispatchThreadID)
 {
 
 	if(CheckSurroundings(id)){
-		if(Result[id.xy].x <= 0)
-			Result[id.xy] = float4(1, 1, 1, 1);
-		else
-			Result[id.xy].x * 0.5;
+		Result[id.xy] = float4(1, 1, 1, 1);
 	} else {
-		Result[id.xy] = float4(0, 0, 0, 1);
+		Result[id.xy] *= 0.5;
 	}
 
 
